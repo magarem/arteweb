@@ -5,12 +5,18 @@ import DataOperations from '../components/DataOperations'
 import { useRouter } from 'next/router'
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-const onSubmit = async values => {
-  await sleep(300)
-  window.alert(JSON.stringify(values, 0, 2))
+// const onSubmit = async values => {
+//   await sleep(300)
+//   window.alert(JSON.stringify(values, 0, 2))
+// }
+interface Props {
+  setuser: Function,
+  user: {
+    uid: string,
+    email: string
+  }
 }
-
-const Home: NextPage = (props) => {
+const Home: NextPage<Props> = (props) => {
   const router = useRouter()
 console.log('index');
 

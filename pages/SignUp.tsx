@@ -37,8 +37,14 @@ function Copyright(props: any) {
 }
 
 const theme = createTheme();
+interface Props {
+  setuser: Function,
+  user: {
+    email: string
+  }
+}
 
-const SignUp: NextPage = (props) => {
+const SignUp: NextPage<Props> = (props) => {
   const router = useRouter()
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

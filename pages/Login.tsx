@@ -41,8 +41,14 @@ function Copyright(props: any) {
 }
 
 const theme = createTheme();
+interface Props {
+  setuser: Function,
+  user: {
+    email: string
+  }
+}
 
-const Login: NextPage = (props) => {
+const Login: NextPage<Props> = (props) =>{
   // const [cookie, setCookie] = useCookies(["user"])
   const router = useRouter()
 
@@ -115,7 +121,7 @@ const Login: NextPage = (props) => {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          {user?.email}
+          {/* {user?.email} */}
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>

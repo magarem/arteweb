@@ -43,9 +43,22 @@ const style = {
 //     console.log("No such document!");
 //   }
 // }
-
-
-const List: NextPage = (props) => {
+interface Props {
+  setuser: Function,
+  currentState2:{
+    img: string
+  },
+  user: {
+    uid: string,
+    email: string
+  }
+}
+interface ss {
+  img: string,
+  title: string,
+  body: string
+}
+const List: NextPage<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = (obj) => {
     console.log(obj);
@@ -55,7 +68,7 @@ const List: NextPage = (props) => {
   const handleClose = () => setOpen(false);
 
   const [currentState, setCurrentState] = useState([]);
-  const [currentState2, setCurrentState2] = useState({});
+  const [currentState2, setCurrentState2] = useState<ss>({img:'', title:'', body:''});
   const [singleReg, setSingleReg] = useState({})
  
   
@@ -71,7 +84,7 @@ const List: NextPage = (props) => {
 
   
 
-  const getList = async (x) => {
+  const getList = async () => {
     // onAuthStateChanged(auth, (currentUser) => {
     //   setUser(currentUser);
     // });
