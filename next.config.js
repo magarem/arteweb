@@ -9,20 +9,43 @@
   
 
 // next.config.js
+
 module.exports = {
   webpack(config, { isServer, dev }) {
-    // Enable webassembly
-    config.experiments = { asyncWebAssembly: true };
+    config.experiments = {
+      asyncWebAssembly: true,
+      layers: true,
+    };
 
-    // In prod mode and in the server bundle (the place where this "chunks" bug
-    // appears), use the client static directory for the same .wasm bundle
-    config.output.webassemblyModuleFilename =
-      isServer && !dev ? "../static/wasm/[id].wasm" : "static/wasm/[id].wasm";
+    if (!dev && isServer) {
+      config.output.webassemblyModuleFilename = "chunks/[id].wasm";
+      config.plugins.push(new WasmChunksFixPlugin());
+    }
 
-    // Ensure the filename for the .wasm bundle is the same on both the client
-    // and the server (as in any other mode the ID's won't match)
-    config.optimization.moduleIds = "named";
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
 
     return config;
   },
 };
+
+class WasmChunksFixPlugin {
+  apply(compiler) {
+    compiler.hooks.thisCompilation.tap("WasmChunksFixPlugin", (compilation) => {
+      compilation.hooks.processAssets.tap(
+        { name: "WasmChunksFixPlugin" },
+        (assets) =>
+          Object.entries(assets).forEach(([pathname, source]) => {
+            if (!pathname.match(/\.wasm$/)) return;
+            compilation.deleteAsset(pathname);
+
+            const name = pathname.split("/")[1];
+            const info = compilation.assetsInfo.get(pathname);
+            compilation.emitAsset(name, source, info);
+          })
+      );
+    });
+  }
+}
