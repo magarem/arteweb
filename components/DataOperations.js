@@ -25,6 +25,9 @@ const dbInstance = collection(database, 'receitas');
 export default function DataOperations(props) {
     
     const [open, setOpen] = useState(false);
+    const [muda, setMuda] = useState(0);
+    const [saved, setSaved] = useState(false);
+    
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -53,16 +56,30 @@ export default function DataOperations(props) {
             title: state.title,
             body: state.body
         }).then(() => {
+            setSaved(true)
             setState({ img: "", title: "", body: "" })
+            setMuda(muda+1)
+
+
+            // useEffect(() => {
+                const timeId = setTimeout(() => {
+                    // After 3 seconds set the show value to false
+                    setSaved(false)
+                    }, 3000)
+            //     }
+            // )
+
+
+
         })
     }
     
     return (
         <>
-           <div className={styles.btnContainer}><br/>
+           <div className={styles.btnContainer}>
                
-               
-                <Upload user={props.user} setState={setState} />
+           {saved && (<h4>Os dados foram registrados com sucesso</h4>)}
+                <Upload key={muda} user={props.user} setState={setState} />
 
               
                 <br />
@@ -87,6 +104,7 @@ export default function DataOperations(props) {
                     
                 <br /><br />
                 {/* <TextField id="outlined-basic" label="Email" variant="outlined" /><br /><br /> */}
+                
                 <Button variant="contained" onClick={save}>Save</Button>
 
             </div>

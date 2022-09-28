@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import { padding } from "@mui/system";
 import Resizer from "react-image-file-resizer";
 import AlertDialog from "./AlertDialog";
+import CircularProgress from '@mui/material/CircularProgress';
 const resizeFile = (file) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
@@ -35,9 +36,14 @@ const resizeFile = (file) =>
   function Upload(props) {
     const [imgURL, setImgURL] = useState("");
     const [progressPorcent, setPorgessPorcent] = useState(0);
-    
+    const [spin, setSpin] = useState(false);
+    const handleSpin = () => {
+      console.log(1);
+      setSpin(!spin)
+    }
     const handleUpload = async (file) => {
       try {
+        setSpin(true)
         // const storage = getStorage(); //firebase storage
         console.log(props.user.uid);
         //create thumbnail using the function we created before
@@ -46,14 +52,14 @@ const resizeFile = (file) =>
         console.log(fileName);
         //references to the location in firebase storage where the image will be uploaded
         const thumbRef = ref(storage, `${props.user.uid}/${fileName}`);
-        setImgURL(thumbUrl);
+        
         //upload thumbnail, because we are using a uri with 'base64'
         //we have to use 'uploadString' with 'data_url' as the third param
         const thumbSnapshot = await uploadString(thumbRef, uri, "data_url");
     
         //you can store this url in your database or do something else with it
         const thumbUrl = await getDownloadURL(thumbSnapshot.ref);
-    
+        setImgURL(thumbUrl);
         //upload main image, works the same
         // const storageRef = ref(storage, `images/${file.name}`);
         // const snapshot = await uploadBytes(storageRef, file);
@@ -63,7 +69,8 @@ const resizeFile = (file) =>
         // const url = await getDownloadURL(snapshot.ref);
         
         props.setState({img: thumbUrl})
-        setImgURL("")
+        setSpin(false)
+        // setImgURL("")
           //     });
       } catch (e) {
         //display an error if something went wrong during the upload
@@ -129,11 +136,7 @@ const resizeFile = (file) =>
   return (
     <div className="App">
       <header className="App-header">
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button> */}
-        <AlertDialog title="" body="teste"/>
-        <form onSubmit={handleSubmit}>
+        {/* <form onSubmit={handleSubmit}> */}
           {/* <input type="file" onChange={onChange}/> */}
           <Button
             variant="contained"
@@ -148,9 +151,11 @@ const resizeFile = (file) =>
             />
           </Button>
           {/* <button>Enviar</button> */}
-        </form>
-        {/*   {!imgURL && <p>{progressPorcent}%</p>} */}<br/>
-        {imgURL && <img src={imgURL} alt="Imagem" height={200} />}
+        <br/>
+        {spin && (<span><br /><CircularProgress /></span>)}
+        {/*   {!imgURL && <p>{progressPorcent}%</p>} */}
+        {imgURL && (<span><br /><img src={imgURL} alt="Imagem" height={200} /></span>)}
+        {/* </form> */}
       </header>
     </div>
   );

@@ -1,8 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DataOperations from '../components/DataOperations'
 import { useRouter } from 'next/router'
+import { Button } from "@mui/material";
+
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 // const onSubmit = async values => {
@@ -18,7 +20,6 @@ interface Props {
 }
 const Home: NextPage<Props> = (props) => {
   const router = useRouter()
-console.log('index');
 
   useEffect(() => {
    
@@ -40,12 +41,13 @@ console.log('index');
             <DataOperations user={props.user}></DataOperations>
           </div>
         </main>
+       
 
-        <footer>
+        {/* <footer>
           <div className="w-full max-w-3xl px-3 mx-auto">
             <p>All right reserved</p>
           </div>
-        </footer>
+        </footer> */}
       </div>
     );
   }else{
