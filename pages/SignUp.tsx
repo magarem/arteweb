@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import type { NextPage } from "next";
 import { useState } from "react";
 import {
+  updateProfile,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
@@ -40,7 +41,8 @@ const theme = createTheme();
 interface Props {
   setuser: Function,
   user: {
-    email: string
+    email: string,
+    displayName: string
   }
 }
 
@@ -55,10 +57,14 @@ const SignUp: NextPage<Props> = (props) => {
     });
   };
 
-  const [registerUser, setRegisterUser] = useState({email: "", password: ""});
+  const [registerUser, setRegisterUser] = useState({email: "", password: "", displayName: ""});
   const [user, setUser] = useState({});
 
   onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  }); 
+  
+  hasUserNameAlreadyInUse(auth, (currentUser) => {
     setUser(currentUser);
   });
 
@@ -69,9 +75,18 @@ const SignUp: NextPage<Props> = (props) => {
         registerUser.email,
         registerUser.password
       );
+      updateProfile(auth.currentUser, {
+        displayName: registerUser.displayName
+      }).then(() => {        
+        // Profile updated!
+        console.log("Profile updated!", auth.currentUser);
+      }).catch((error) => {
+        // An error occurred
+        console.log(error);
+      });
       console.log(user);
       props.setuser(user.user)
-      router.push('/dashboard')
+      router.push(`/${registerUser.displayName}/adm/dashboard`)
     } catch (error) {
       console.log(error.message);
     }
@@ -107,6 +122,19 @@ const SignUp: NextPage<Props> = (props) => {
                   autoComplete="email"
                   onChange={(event) => {
                     setRegisterUser({...registerUser, email: event.target.value });
+                  }}
+                />
+              </Grid> 
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="displayName"
+                  label="Nome de usuário"
+                  name="displayName"
+                  autoComplete="displayName"
+                  onChange={(event) => {
+                    setRegisterUser({...registerUser, displayName: event.target.value });
                   }}
                 />
               </Grid>

@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Preview from '@mui/icons-material/Preview';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -22,7 +22,11 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+
+import { auth } from "../firebase";
+import { dark } from '@mui/material/styles/createPalette';
+
+// import { auth } from "../firebaseConfig";
 // import { useCookies } from "react-cookie"
 // import Cookies from 'js-cookie'
 // import { parseCookies, setCookie, destroyCookie } from 'nookies'
@@ -90,13 +94,13 @@ const Login: NextPage<Props> = (props) =>{
         loginUser.password
       );
       deleteCookie('user')
-      console.log(user.user.uid);
+      console.log(user.user);
       setCookie('user', user.user)
       localStorage.removeItem('user')
       localStorage.setItem('user', JSON.stringify(user.user))
 
       props.setuser(user.user)
-      router.push('/dashboard')
+      router.push(`/${user.user.displayName}/adm/dashboard`)
 
     } catch (error) {
       console.log(error.message);
@@ -104,7 +108,7 @@ const Login: NextPage<Props> = (props) =>{
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={dark}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -115,11 +119,11 @@ const Login: NextPage<Props> = (props) =>{
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}> */}
+            <Preview fontSize='large' />
+          {/* </Avatar> */}
           <Typography component="h1" variant="h5">
-            Login
+            ArteWeb
           </Typography>
           {/* {user?.email} */}
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>

@@ -1,5 +1,6 @@
 
-import { storage } from "../firebaseConfig";
+// import { storage } from "../firebaseConfig";
+import { storage } from "../firebase";
 // import { ref, getDownloadURL, uploadBytesResumable, uploadBytes } from "firebase/storage";
 import {
   getStorage,
@@ -14,6 +15,8 @@ import { padding } from "@mui/system";
 import Resizer from "react-image-file-resizer";
 import AlertDialog from "./AlertDialog";
 import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
+import Modal from '@mui/material/Modal';
 const resizeFile = (file) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
@@ -68,7 +71,7 @@ const resizeFile = (file) =>
         //similarly you can upload to a database from here
         // const url = await getDownloadURL(snapshot.ref);
         
-        props.setState({img: thumbUrl})
+        props.setState({...props.state, img:thumbUrl})
         setSpin(false)
         // setImgURL("")
           //     });
@@ -154,7 +157,7 @@ const resizeFile = (file) =>
         <br/>
         {spin && (<span><br /><CircularProgress /></span>)}
         {/*   {!imgURL && <p>{progressPorcent}%</p>} */}
-        {imgURL && (<span><br /><img src={imgURL} alt="Imagem" height={200} /></span>)}
+        {/* {imgURL && (<span><br /><img src={imgURL} alt="Imagem" height={200} /></span>)} */}
         {/* </form> */}
       </header>
     </div>

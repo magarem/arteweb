@@ -19,11 +19,16 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
 import Menu from '@mui/material/Menu';
+import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
-import { app, database, storage, auth } from '../firebaseConfig';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import { app, database, storage, auth } from '../firebaseConfig';
+import { auth } from '../firebase';
 import * as Icons from '@material-ui/icons/'
-
 import Link from 'next/link'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import { useRouter } from 'next/router'
 import {
   onAuthStateChanged,
   signOut,
@@ -95,9 +100,19 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
   }),
 );
-
-export default function Layout({ children, home, user, setuser }) {
-  
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#1976d2',
+    },
+  },
+});
+export default function Layout({ children, home, user, setuser, name }) {
+  const router = useRouter()
+  const { asPath } = useRouter()
+  console.log(22,user);
+  // const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const open_ = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -110,11 +125,6 @@ export default function Layout({ children, home, user, setuser }) {
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  // const [user, setUser] = useState({});
-
-  // onAuthStateChanged(auth, (currentUser) => {
-  //   setUser(currentUser);
-  // });
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -125,21 +135,43 @@ export default function Layout({ children, home, user, setuser }) {
   };
 
   const logout = async () => {
+    console.log("logout");
     await signOut(auth);
   };
 
-  function isJsonString(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return JSON.parse(str);
-}
+  function capitalizeFirstLetter(str) {
+    return str[0]?.toUpperCase() + str.slice(1);
+  }
 
-  return (
-   
-    <Box sx={{ display: 'flex' }}>
+  function appBarLabel(label) {
+    return (
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          {label}
+        </Typography>
+      </Toolbar>
+    );
+  }
+  useEffect(() => {
+    console.log(router.pathname);
+  }, [])
+  console.log(":>",asPath.indexOf("/adm"))
+  if (asPath.includes("/Login")){
+    return (
+      <ThemeProvider theme={darkTheme}>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <CssBaseline />
+          {children}
+        </Box>
+      </ThemeProvider>
+    )
+  }
+  if (asPath.includes("/adm",2)){
+    return (
+      <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -162,16 +194,17 @@ export default function Layout({ children, home, user, setuser }) {
             </Typography>
             </Grid>
             <Grid item xs={6} sm={6} md={6}  >
-              <Typography variant="h6" noWrap component="div" align="right">
+              <Typography variant="h7" noWrap component="div" align="right">
               <Button
+                startIcon={<AccountCircleIcon />}
                 id="basic-button"
-                variant="contained"
+                variant="text"
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
               >
-              {user?.email} 
+              {user?.displayName} 
               </Button>
               <Menu
                 id="basic-menu"
@@ -199,13 +232,13 @@ export default function Layout({ children, home, user, setuser }) {
         <Divider />
         <List>
           {[
-            ['Enviar', 'AddAPhoto', '/'], 
-            ['Listar', 'PhotoLibrary', '/list'], 
+            ['Enviar', 'AddAPhoto', `/${user?.displayName}/adm/create`], 
+            ['Listar', 'PhotoLibrary', `/${user?.displayName}/adm/list`], 
             ['Login', 'AccountBox', '/Login'], 
             ['Novo usuario', 'AcUnit', '/SignUp ']
           ].map(([text, icon, link], index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-             <Link href={link}>
+            <Link href={link}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -221,7 +254,7 @@ export default function Layout({ children, home, user, setuser }) {
                       }} >
                       {React.createElement(Icons[icon])}
                     </ListItemIcon>
-                 
+                
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
               </Link>
@@ -229,13 +262,74 @@ export default function Layout({ children, home, user, setuser }) {
           ))}
         </List>
         <Divider />
-        
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {children}
       </Box>
     </Box>
-    
-  );
+    )
+  }else{
+    return (
+      <>
+      <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+        <AppBar position="fixed" color="primary" >
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+          <AutoAwesomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+          {capitalizeFirstLetter(asPath.split("/")[1])}
+
+          </Typography>
+          </Toolbar>
+          </Container>
+        </AppBar>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }} style={{marginTop: "60px"}}>
+            {children}
+        </Box>
+        {/* <AppBar position="static" color="primary">
+          {appBarLabel('default')}
+        </AppBar> */}
+      </ThemeProvider>
+        {/* <Box sx={{ flexGrow: 1 }}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                {capitalizeFirstLetter(location.pathname.split("/")[1])}
+              </Typography>
+            </Toolbar>
+          </AppBar>
+        </Box>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            {children}
+        </Box> */}
+      </>
+
+
+
+      
+    );
+  }
 }
+export const getServerSideProps = async ({ req }) => {
+  return {
+    props: {
+      name: "req.headers" 
+    }
+  };
+};

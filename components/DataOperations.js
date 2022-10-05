@@ -1,5 +1,6 @@
 import styles from '../styles/data.module.scss'
-import { app, database, storage } from '../firebaseConfig';
+// import { app, database, storage } from '../firebaseConfig';
+import operations, {loadData} from "../services/services";
 import { collection, addDoc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
@@ -21,20 +22,13 @@ const style = {
     p: 4,
   };
 
-const dbInstance = collection(database, 'receitas');
+const dbInstance = collection(database, 'cards');
 export default function DataOperations(props) {
     
     const [open, setOpen] = useState(false);
     const [muda, setMuda] = useState(0);
     const [saved, setSaved] = useState(false);
-    
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
     const [state, setState] = useState({ img: "", title: "", body: "" });
-    // useEffect(() => {
-    //     console.log(2, props.user)
-    //   }, [props.user])
     const handleChange = e => {
         const { name, value } = e.target;
         console.log(name, value)
@@ -46,32 +40,40 @@ export default function DataOperations(props) {
 
     const save = () => {
         console.table({
-            user: props.user.uid,
+            useruid: props.user.uid,
+            username: props.user.displayName,
             img: state.img,
             title: state.title,
             body: state.body});
-        addDoc(dbInstance, {
-            user: props.user.uid,
+
+        operations.create(props.user.displayName, {
+            useruid: props.user.uid,
             img: state.img,
             title: state.title,
             body: state.body
-        }).then(() => {
-            setSaved(true)
-            setState({ img: "", title: "", body: "" })
-            setMuda(muda+1)
-
-
-            // useEffect(() => {
-                const timeId = setTimeout(() => {
-                    // After 3 seconds set the show value to false
-                    setSaved(false)
-                    }, 3000)
-            //     }
-            // )
-
-
-
         })
+        setSaved(true)
+        setState({ img: "", title: "", body: "" })
+        setMuda(muda+1)
+        const timeId = setTimeout(() => {
+            // After 3 seconds set the show value to false
+            setSaved(false)
+        }, 3000)
+        // addDoc(dbInstance, {
+        //     useruid: props.user.uid,
+        //     username: props.user.displayName,
+        //     img: state.img,
+        //     title: state.title,
+        //     body: state.body
+        // }).then(() => {
+        //     setSaved(true)
+        //     setState({ img: "", title: "", body: "" })
+        //     setMuda(muda+1)
+        //     const timeId = setTimeout(() => {
+        //         // After 3 seconds set the show value to false
+        //         setSaved(false)
+        //     }, 3000)
+        // })
     }
     
     return (
