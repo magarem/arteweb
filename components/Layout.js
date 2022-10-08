@@ -23,7 +23,7 @@ import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // import { app, database, storage, auth } from '../firebaseConfig';
-import { auth } from '../firebase';
+// import { auth } from '../firebase';
 import * as Icons from '@material-ui/icons/'
 import Link from 'next/link'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';

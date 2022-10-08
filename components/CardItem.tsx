@@ -16,7 +16,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeveIcon from '@mui/icons-material/DeleteForever';
-import operations, {loadData} from "../services/services";
+// import operations, {loadData} from "../services/services";
+import CardDataService from "../services/services2";
+
+import * as ReactDOM from 'react-dom';
+
+// import 'react-app-polyfill/ie11';
+
 
 // import { useState, useEffect } from "react";
 import { Router, useRouter } from "next/router";
@@ -56,7 +62,7 @@ export default function CardItem({item, user, currentState, setCurrentState}){
     
     const delete_card = (user, key) => {
       if (window.confirm("Delete the item?")) {
-        operations.delete(user, key)
+        CardDataService.delete(user, key)
         handleRemove(key)
       }
     }
@@ -64,46 +70,88 @@ export default function CardItem({item, user, currentState, setCurrentState}){
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
-
+    const Item = ({ item }) => (
+      <Grid item md={3}  >
+      <Card sx={{ maxWidth: 345 }} key={item.key}>
+      <CardActions disableSpacing>
+       <IconButton aria-label="Edit" onClick={() => callLink("/"+user.displayName+"/adm/create?card_id="+item.key)}>
+         <EditIcon />
+       </IconButton>
+       <IconButton aria-label="Delete" onClick={() => delete_card(user.displayName, item.key)}>
+         <DeleteForeveIcon />
+       </IconButton>
+     </CardActions>
+     <CardMedia height={300} component="img" image={item.img} onClick = {() => {handleOpen({...item})}}/>
+     <CardContent>
+       <Grid container rowSpacing={2} columnSpacing={2}>
+         <Grid item md={10}  >
+         <Typography variant="h6" color="text.secondary">
+       {item.title}
+       </Typography>
+         </Grid>
+         <Grid item md={2}  >
+         <ExpandMore
+       expand={expanded}
+       onClick={handleExpandClick}
+       aria-expanded={expanded}
+       aria-label="show more"
+     >
+       <ExpandMoreIcon />
+     </ExpandMore>
+         </Grid>
+       </Grid>
+       
+     </CardContent>
+ 
+     <Collapse in={expanded} timeout="auto" unmountOnExit>
+       <CardContent>
+         <Typography paragraph>
+           {item.body}
+         </Typography>
+       </CardContent>
+     </Collapse>
+   </Card>
+   </Grid>
+    );
     return (  
-      <Card sx={{ maxWidth: 345 }}>
-         <CardActions disableSpacing>
-          <IconButton aria-label="Edit" onClick={() => callLink("/teste11/adm/create?card_id="+item.key)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton aria-label="Delete" onClick={() => delete_card(user.displayName, item.key)}>
-            <DeleteForeveIcon />
-          </IconButton>
-        </CardActions>
-        <CardMedia height={300} component="img" image={item.img} onClick = {() => {handleOpen({...item})}}/>
-        <CardContent>
-          <Grid container rowSpacing={2} columnSpacing={2}>
-            <Grid item md={10}  >
-            <Typography variant="h6" color="text.secondary">
-          {item.title}
-          </Typography>
-            </Grid>
-            <Grid item md={2}  >
-            <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
-            </Grid>
-          </Grid>
-          
-        </CardContent>
-    
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph>
-              {item.body}
-            </Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
+      <Card sx={{ maxWidth: 345 }} key={item.key}>
+      <CardActions disableSpacing>
+       <IconButton aria-label="Edit" onClick={() => callLink("/"+user.displayName+"/adm/create?card_id="+item.id)}>
+         <EditIcon />
+       </IconButton>
+       <IconButton aria-label="Delete" onClick={() => delete_card(user.displayName, item.key)}>
+         <DeleteForeveIcon />
+       </IconButton>
+     </CardActions>
+     <CardMedia height={300} component="img" image={item.img} onClick = {() => {handleOpen({...item})}}/>
+     <CardContent>
+       <Grid container rowSpacing={2} columnSpacing={2}>
+         <Grid item md={10}  >
+         <Typography variant="h6" color="text.secondary">
+       {item.title}
+       </Typography>
+         </Grid>
+         <Grid item md={2}  >
+         <ExpandMore
+       expand={expanded}
+       onClick={handleExpandClick}
+       aria-expanded={expanded}
+       aria-label="show more"
+     >
+       <ExpandMoreIcon />
+     </ExpandMore>
+         </Grid>
+       </Grid>
+       
+     </CardContent>
+ 
+     <Collapse in={expanded} timeout="auto" unmountOnExit>
+       <CardContent>
+         <Typography paragraph>
+           {item.body}
+         </Typography>
+       </CardContent>
+     </Collapse>
+   </Card>
     )
 }

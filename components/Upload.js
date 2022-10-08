@@ -1,6 +1,6 @@
 
 // import { storage } from "../firebaseConfig";
-import { storage } from "../firebase";
+import { storage } from "../firebase2";
 // import { ref, getDownloadURL, uploadBytesResumable, uploadBytes } from "firebase/storage";
 import {
   getStorage,
@@ -32,9 +32,6 @@ const resizeFile = (file) =>
       "base64"
     );
   });
- 
-  
- 
 
   function Upload(props) {
     const [imgURL, setImgURL] = useState("");

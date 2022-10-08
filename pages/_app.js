@@ -5,7 +5,7 @@ import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/router'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-
+import 'styles/style.css';
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',

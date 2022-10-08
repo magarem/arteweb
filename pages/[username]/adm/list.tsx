@@ -11,9 +11,15 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
-import {loadData} from "../../../services/services";
+// import operations, {loadData} from "../../../services/services";
+import CardDataService from "../../../services/services2";
+
 import { useRouter } from "next/router";
 import CardsGrid from '../../../components/CardsGrid'
+
+import { collection, query, where, getDocs } from "firebase/firestore";
+
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -68,11 +74,10 @@ const List: NextPage<Props> = (props) => {
   useEffect(() => {
     if (props.user.displayName) {
       console.log(user);
-      loadData(props.user.displayName).then((data)=>{
-        console.log(data)
+      const data = CardDataService.read(props.user.displayName).then((data)=>{
         setCurrentState(data)
-        console.log(currentState)
-      })
+        console.log(data)
+       })
     }
   }, [props.user])
 
@@ -97,6 +102,7 @@ const List: NextPage<Props> = (props) => {
       justifyContent: "space-between"
     }
   };
+  
   function removeObjectWithId(arr, id) {
     const objWithIdIndex = arr.findIndex((obj) => obj.id === id);
     arr.splice(objWithIdIndex, 1);
