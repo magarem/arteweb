@@ -111,7 +111,7 @@ const darkTheme = createTheme({
 export default function Layout({ children, home, user, setuser, name }) {
   const router = useRouter()
   const { asPath } = useRouter()
-  console.log(22,user);
+  
   // const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const open_ = Boolean(anchorEl);
@@ -277,18 +277,20 @@ export default function Layout({ children, home, user, setuser, name }) {
         <AppBar position="fixed" color="primary" >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-          <AutoAwesomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          {/* <AutoAwesomeIcon sx={{ display: { md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
             component="a"
             href="/"
             sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
+              mr: 0,
+              display: { md: 'flex' },
+              flexGrow: 1,
+              textAlign: "center",
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.1rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
