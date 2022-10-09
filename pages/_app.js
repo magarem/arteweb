@@ -31,15 +31,20 @@ export default function MyApp({ Component, pageProps }) {
        }
     }
   },[])
-    
-    return (
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <Layout user={user} >
-            <Component key={router.pathname} {...pageProps} user={user} setuser={setUser}/>
-        </Layout>
-      </ThemeProvider>
-    )
+    if (router.asPath.includes("/json")){
+      return (
+        <Component key={router.pathname} {...pageProps} user={user} setuser={setUser}/>
+      )
+    }else{
+      return (
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <Layout user={user} >
+              <Component key={router.pathname} {...pageProps} user={user} setuser={setUser}/>
+          </Layout>
+        </ThemeProvider>
+      )
+    }
 }
 
    

@@ -109,6 +109,20 @@ const darkTheme = createTheme({
       main: '#1976d2',
     },
   },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  }
 });
 export default function Layout({ children, home, user, setuser, name }) {
   const router = useRouter()
@@ -293,7 +307,7 @@ export default function Layout({ children, home, user, setuser, name }) {
               display: { md: 'flex' },
               flexGrow: 1,
               textAlign: "center",
-              fontFamily: 'monospace',
+              fontFamily: 'Arial',
               fontWeight: 700,
               letterSpacing: '.1rem',
               color: 'inherit',

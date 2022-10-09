@@ -16,6 +16,7 @@
     "@mui/material": "^5.10.5",
     "@mui/x-data-grid": "^5.17.2",
     "@thaddeusjiang/react-sortable-list": "^0.0.5",
+    "axios": "^1.1.2",
     "cookie": "^0.5.0",
     "cookies-next": "^2.1.1",
     "date-fns": "^2.29.3",
