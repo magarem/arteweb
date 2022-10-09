@@ -48,14 +48,14 @@ interface Props {
 
 const SignUp: NextPage<Props> = (props) => {
   const router = useRouter()
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //   });
+  // };
 
   const [registerUser, setRegisterUser] = useState({email: "", password: "", displayName: ""});
   const [user, setUser] = useState({});
@@ -64,9 +64,9 @@ const SignUp: NextPage<Props> = (props) => {
     setUser(currentUser);
   }); 
   
-  hasUserNameAlreadyInUse(auth, (currentUser) => {
-    setUser(currentUser);
-  });
+  // hasUserNameAlreadyInUse(auth, (currentUser) => {
+  //   setUser(currentUser);
+  // });
 
   const register = async () => {
     try {
@@ -91,7 +91,6 @@ const SignUp: NextPage<Props> = (props) => {
       console.log(error.message);
     }
   }
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -110,7 +109,7 @@ const SignUp: NextPage<Props> = (props) => {
           <Typography component="h1" variant="h5">
             Registro
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          {/* <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}> */}
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -175,7 +174,7 @@ const SignUp: NextPage<Props> = (props) => {
                 </Link>
               </Grid>
             </Grid>
-          </Box>
+          {/* </Box> */}
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>

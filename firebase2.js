@@ -3,7 +3,7 @@
 
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore'
-
+import { getAuth } from "firebase/auth";
 // import firebase from 'firebase/compat/app';
 // import 'firebase/compat/auth';
 // import 'firebase/compat/firestore'
@@ -22,5 +22,6 @@ let config = {
 const app = initializeApp(config);
 const db = getFirestore(app);
 const storage = getStorage(app);
-export {db, storage}
+const auth = getAuth(app);
+export {db, storage, auth}
 // export default firebase.firestore();

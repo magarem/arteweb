@@ -29,6 +29,8 @@ import Link from 'next/link'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { useRouter } from 'next/router'
+import { auth } from "../firebase2";
+import { setCookie, deleteCookie } from 'cookies-next';
 import {
   onAuthStateChanged,
   signOut,
@@ -137,6 +139,9 @@ export default function Layout({ children, home, user, setuser, name }) {
   const logout = async () => {
     console.log("logout");
     await signOut(auth);
+    deleteCookie('user')
+    localStorage.removeItem('user')
+    router.push('/Login')
   };
 
   function capitalizeFirstLetter(str) {

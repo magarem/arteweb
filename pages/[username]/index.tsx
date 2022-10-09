@@ -22,6 +22,7 @@ import Cookies from 'js-cookie'
 import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {BrowserView, MobileView} from 'react-device-detect';
 
 import {
   onAuthStateChanged,
@@ -116,7 +117,7 @@ const Show: NextPage<Props> = (props) => {
     }
   };
 
-  const GridItem = ({item}) => {
+  const CardItem = ({item}) => {
     const [expanded, setExpanded] =  useState(false);
     const handleOpen = (obj) => {
       console.log(obj);
@@ -130,11 +131,22 @@ const Show: NextPage<Props> = (props) => {
     return (
       <Box style={{"padding": "0px"}}>
       <Card raised>
-        <CardMedia
-          // onClick = {() => {handleOpen({...item})}}
-          component="img"
-          image={item.img}
-        />
+        <BrowserView>
+          <CardMedia
+            height={300} 
+            // onClick = {() => {handleOpen({...item})}}
+            component="img"
+            image={item.img}
+          />
+        </BrowserView>
+        <MobileView>
+          <CardMedia
+            // onClick = {() => {handleOpen({...item})}}
+            component="img"
+            image={item.img}
+          />
+        </MobileView>
+        
         <CardContent>
           <Grid container rowSpacing={2} columnSpacing={2}>
             <Grid item md={10} xs={10}>
@@ -202,7 +214,7 @@ const Show: NextPage<Props> = (props) => {
           {
             currentState.map((item, key) => (
               <Grid item xs={12} sm={4} md={3} key={key} >
-               <GridItem item={item}/>
+                <CardItem item={item}/>
               </Grid>
             ))
           }

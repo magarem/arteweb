@@ -57,6 +57,7 @@ class CardDataService {
   }
 
   async delete (user, id) {
+    console.log(id)
      await deleteDoc(doc(db, user, id));
   }
 }

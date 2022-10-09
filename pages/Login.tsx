@@ -1,10 +1,7 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -17,13 +14,12 @@ import { useState } from "react";
 import { setCookie, deleteCookie } from 'cookies-next';
 import { useRouter } from 'next/router'
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
 
-import { auth } from "../firebase";
+import { auth } from "../firebase2";
 import { dark } from '@mui/material/styles/createPalette';
 
 // import { auth } from "../firebaseConfig";
@@ -100,7 +96,7 @@ const Login: NextPage<Props> = (props) =>{
       localStorage.setItem('user', JSON.stringify(user.user))
 
       props.setuser(user.user)
-      router.push(`/${user.user.displayName}/adm/dashboard`)
+      router.push(`/${user.user.displayName}/adm/list`)
 
     } catch (error) {
       console.log(error.message);
